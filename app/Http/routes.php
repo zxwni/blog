@@ -31,4 +31,9 @@ $app->group(['namespace'=>'App\Http\Controllers'],function ($app){
     $app->get('test/test','TestController@test');
     $app->get('test/select','TestController@select');
     $app->get('admin/login','Admin\AdminController@login');
+    $app->get('admin/code','Admin\AdminController@code');
+    $app->post('admin/checklogin','Admin\AdminController@checklogin');
+
+
+
 });

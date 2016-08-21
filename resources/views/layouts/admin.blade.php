@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/resources/views/admin/style/font/css/font-awesome.min.css">
     <script type="text/javascript" src="/resources/views/admin/style/js/jquery.js"></script>
     <script type="text/javascript" src="/resources/views/admin/style/js/ch-ui.admin.js"></script>
+    <script type="text/javascript" src="/resources/views/org/layer/layer.js"></script>
 </head>
 <body>
 @yield('content')

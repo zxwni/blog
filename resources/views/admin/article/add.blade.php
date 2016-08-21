@@ -3,20 +3,19 @@
         <!--面包屑导航 开始-->
 <div class="crumb_warp">
     <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
-    <i class="fa fa-home"></i> <a href="{{url('admin/info')}}">首页</a> &raquo; 添加文章分类
+    <i class="fa fa-home"></i> <a href="{{url('admin/info')}}">首页</a> &raquo; 文章管理
 </div>
 <!--面包屑导航 结束-->
 
 <!--结果集标题与导航组件 开始-->
 <div class="result_wrap">
     <div class="result_title">
-        <h3>快捷操作</h3>
+        <h3>添加文章</h3>
     </div>
     <div class="result_content">
         <div class="short_wrap">
-            <a href="#"><i class="fa fa-plus"></i>新增文章</a>
-            <a href="#"><i class="fa fa-recycle"></i>批量删除</a>
-            <a href="#"><i class="fa fa-refresh"></i>更新排序</a>
+            <a href="{{url('admin/article/create')}}"><i class="fa fa-plus"></i>添加文章</a>
+            <a href="{{url('admin/article')}}"><i class="fa fa-recycle"></i>全部文章</a>
         </div>
     </div>
 </div>
@@ -36,66 +35,71 @@
         @endif
     </div>
 
-    <form action="{{url('admin/storecreate')}}" method="post">
+    <form action="{{url('admin/article/storecreate')}}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <table class="add_tab">
             <tbody>
             <tr>
-                <th width="120"><i class="require">*</i>父级分类：</th>
+                <th width="120">分类：</th>
                 <td>
-                    <?php
-                        $data=json_decode($data);
-
-                    ?>
-
-                    <select name="cate_pid">
-                        <option value="">==顶级分类==</option>
+                    <select name="cate_id">
                         @foreach($data as $d)
-                         <option value="{{$d->cate_id}}">{{$d->cate_name}}</option>
+                            <option value="{{$d->cate_id}}">{{$d->_cate_name}}</option>
                         @endforeach
                     </select>
                 </td>
             </tr>
-
             <tr>
-                <th><i class="require">*</i>分类名称：</th>
+                <th>文章标题：</th>
                 <td>
-                    <input type="text" name="cate_name">
-                    <span><i class="fa fa-exclamation-circle yellow"></i>分类名称必须填写</span>
+                    <input type="text" class="lg" name="art_title">
                 </td>
             </tr>
 
-
-
             <tr>
-                <th>分类标题：</th>
+                <th>编辑：</th>
                 <td>
-                    <input type="text" class="lg" name="cate_title">
+                    <input type="text" class="sm" name="art_editor">
                 </td>
             </tr>
 
+            <tr>
+                <th>图片上传：</th>
+                <td>
+                    <input type="file" size="50" name="art_thumb">
+
+                </td>
+            </tr>
             <tr>
                 <th>关键词：</th>
                 <td>
-                    <textarea name="cate_keyword"></textarea>
+                    <input type="text" class="lg" name="art_tag">
                 </td>
             </tr>
             <tr>
                 <th>描述：</th>
                 <td>
-                    <textarea name="cate_description"></textarea>
+                    <textarea name="art_description"></textarea>
                 </td>
             </tr>
-
-
             <tr>
-                <th>排序：</th>
-                <td>
-                    <input type="text" class="sm" name="cate_order" value="0">
-                    <span><i class="fa fa-exclamation-circle yellow"></i>默认排序为0</span>
+                <th>文章内容：</th>
+                <td >
+                    <script type="text/javascript" charset="utf-8" src="/resources/views/org/uedit/ueditor.config.js"></script>
+                    <script type="text/javascript" charset="utf-8" src="/resources/views/org/uedit/ueditor.all.min.js"> </script>
+                    <script type="text/javascript" charset="utf-8" src="/resources/views/org/uedit/lang/zh-cn/zh-cn.js"></script>
+                    <script id="editor" name="art_content" type="text/plain" style="width:860px;height:300px;"></script>
+                    <script type="text/javascript">
+                        var ue = UE.getEditor('editor');
+                    </script>
+                    <style>
+                        .edui-default{line-height:28px ;}
+                        div.edui-combox-body,div.edui-button-body,div.edui-splitbutton-body
+                        {overflow: hidden;height: 20px}
+                        div.edui-box{overflow: hidden;height: 22px;}
+                    </style>
                 </td>
             </tr>
-
             <tr>
                 <th></th>
                 <td>

@@ -19,9 +19,11 @@ $app = new Laravel\Lumen\Application(
 	realpath(__DIR__.'/../')
 );
 
- $app->withFacades();
+$app->withFacades();
 
-// $app->withEloquent();
+$app->withEloquent();
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -55,17 +57,17 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//     // 'Illuminate\Cookie\Middleware\EncryptCookies',
-//     // 'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
-//     // 'Illuminate\Session\Middleware\StartSession',
-//     // 'Illuminate\View\Middleware\ShareErrorsFromSession',
-//     // 'Laravel\Lumen\Http\Middleware\VerifyCsrfToken',
-// ]);
+ $app->middleware([
+      'Illuminate\Cookie\Middleware\EncryptCookies',
+      'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
+      'Illuminate\Session\Middleware\StartSession',
+      'Illuminate\View\Middleware\ShareErrorsFromSession',
+      'Laravel\Lumen\Http\Middleware\VerifyCsrfToken',
+ ]);
 
-// $app->routeMiddleware([
-
-// ]);
+ $app->routeMiddleware([
+    'adminlogin'=>'App\Http\Middleware\AdminLogin',
+ ]);
 
 /*
 |--------------------------------------------------------------------------
@@ -78,7 +80,7 @@ $app->singleton(
 |
 */
 
-// $app->register('App\Providers\AppServiceProvider');
+ $app->register('App\Providers\AppServiceProvider');
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +92,7 @@ $app->singleton(
 | can respond to, as well as the controllers that may handle them.
 |
 */
+
 
 require __DIR__.'/../app/Http/routes.php';
 

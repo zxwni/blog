@@ -2,7 +2,7 @@
 
 use Closure;
 
-class ExampleMiddleware {
+class AdminLogin {
 
     /**
      * Handle an incoming request.
@@ -13,7 +13,12 @@ class ExampleMiddleware {
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+
+        if(!($request->session()->has('user'))){
+            return redirect('admin/login');
+        }else{
+            return $next($request);
+        }
     }
 
 }

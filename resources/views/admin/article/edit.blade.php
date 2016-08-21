@@ -3,19 +3,19 @@
         <!--面包屑导航 开始-->
 <div class="crumb_warp">
     <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
-    <i class="fa fa-home"></i> <a href="{{url('admin/info')}}">首页</a> &raquo; 添加文章
+    <i class="fa fa-home"></i> <a href="{{url('admin/info')}}">首页</a> &raquo; 文章管理
 </div>
 <!--面包屑导航 结束-->
 
 <!--结果集标题与导航组件 开始-->
 <div class="result_wrap">
     <div class="result_title">
-        <h3>添加文章</h3>
+        <h3>编辑文章</h3>
     </div>
     <div class="result_content">
         <div class="short_wrap">
-            <a href="#"><i class="fa fa-plus"></i>添加文章</a>
-            <a href="#"><i class="fa fa-recycle"></i>全部文章</a>
+            <a href="{{url('admin/article/create')}}"><i class="fa fa-plus"></i>添加文章</a>
+            <a href="{{url('admin/article')}}"><i class="fa fa-recycle"></i>全部文章</a>
         </div>
     </div>
 </div>
@@ -28,26 +28,22 @@
         @if(session('msg'))
             <p style="color: red"><?php  echo session('msg')?></p>
         @endif
-        @if(count($errors)>0)
-            @foreach($errors->all() as $error)
-                <p style="color: red">{{$error}}</p>
-            @endforeach
-        @endif
     </div>
 
-    <form action="{{url('admin/article/storecreate')}}" method="post" enctype="multipart/form-data">
+    <form action="{{url('admin/article/'.$field->art_id.'/update')}}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="_method" value="put" />
+
         <table class="add_tab">
             <tbody>
             <tr>
                 <th width="120">分类：</th>
-                <?php
-                  $data=json_decode($data);
-                ?>
                 <td>
-                    <select name="cate_id">
+                    <select name="art_id">
                         @foreach($data as $d)
-                            <option value="{{$d->cate_id}}">{{$d->_cate_name}}</option>
+                            <option value="{{$d->cate_id}}"
+                                @if($field->cate_id == $d->cate_id) selected @endif
+                            >{{$d->_cate_name}}</option>
                         @endforeach
                     </select>
                 </td>
@@ -55,34 +51,34 @@
             <tr>
                 <th>文章标题：</th>
                 <td>
-                    <input type="text" class="lg" name="art_title">
+                    <input type="text" class="lg" name="art_title" value="{{$field->art_title}}">
                 </td>
             </tr>
 
             <tr>
                 <th>编辑：</th>
                 <td>
-                    <input type="text" class="sm" name="art_editor">
+                    <input type="text" class="sm" name="art_editor" value="{{$field->art_editor}}">
                 </td>
             </tr>
 
             <tr>
                 <th>图片上传：</th>
                 <td>
-                    <input type="file" size="50" name="art_thumb">
+                    <input type="file" size="50" name="art_thumb" value="{{$field->art_thumb}}">
 
                 </td>
             </tr>
             <tr>
                 <th>关键词：</th>
                 <td>
-                    <input type="text" class="lg" name="art_tag">
+                    <input type="text" class="lg" name="art_tag" value="{{$field->art_tag}}">
                 </td>
             </tr>
             <tr>
                 <th>描述：</th>
                 <td>
-                    <textarea name="art_description"></textarea>
+                    <textarea name="art_description"> {{$field->art_description}}"</textarea>
                 </td>
             </tr>
             <tr>
@@ -91,7 +87,7 @@
                     <script type="text/javascript" charset="utf-8" src="/resources/views/org/uedit/ueditor.config.js"></script>
                     <script type="text/javascript" charset="utf-8" src="/resources/views/org/uedit/ueditor.all.min.js"> </script>
                     <script type="text/javascript" charset="utf-8" src="/resources/views/org/uedit/lang/zh-cn/zh-cn.js"></script>
-                    <script id="editor" name="art_content" type="text/plain" style="width:860px;height:300px;"></script>
+                    <script id="editor" name="art_content"  type="text/plain" style="width:860px;height:300px;">{!!$field->art_content!!}</script>
                     <script type="text/javascript">
                         var ue = UE.getEditor('editor');
                     </script>

@@ -1,57 +1,53 @@
 <?php namespace App\Http\Controllers\Admin;
 
-
-
 use App\Http\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-require_once '../resources/views/org/Code.class.php';
-class AdminController extends CommonController
+class IndexController extends CommonController
 {
-    public function login()
-    {
-        return view('admin.login');
+    public function index(){
+        return view('admin.index');
     }
-
-    public function Code()
-    {
-        $code=new \Captcha();
-        $code->create();
+    public function info(){
+        return view('admin.info');
     }
+    //修改密码
+    public function pass(Request $request){
+        $input=$request->all();
+        if(!$input){
+            return view('admin.pass');
+        }else{
+            $rules=[
+                'password'=>'required|between:6,20|confirmed',
+            ];
+            $message=[
+                'password.required'=>'新密码不能为空',
+                'password.between'=>'新密码必须在6-20位之间',
+                'password.confirmed'=>'新密码和确认密码不一致',
 
-    public function checklogin(Request $request)
-    {
-        $get = $request->all();
-        $code = new \Captcha();
-        $getcode = $code->getCode();
-        $validator = Validator::make($request->all(), [
-            'code' => "required",
-            'user_name' => 'required',
-            'user_pass' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator->errors());
-        } else {
-            if(strtolower($get['code'])!=strtolower($getcode)){
-                return redirect()->back()->with('msg','验证码错误');
+            ];
+            $validator=Validator::make($input,$rules,$message);
+            if($validator->passes()){
+                $user=$request->session()->get('user');
+                $user=json_decode($user);
+                $u=User::find($user->uid);
+                if($u->upassword==$input['password_o']){
+                    $u->upassword = $input['password'];
+                    $u->update();
+                    return redirect()->back()->with('msg','密码修改成功');
+                }else{
+                    return redirect()->back()->with('msg','原密码输入错误');
+            }
             }else{
-                $user = User::all();
-                $flag = false;
-                foreach ($user as $k => $v) {
-                    if ($v->uname == $get['user_name'] && $v->upassword == $get['user_pass']) {
-                        $flag = true;
-                    }
-                }
-                if (!$flag) {
-                    return redirect()->back()->with('msg', '用户名或者密码错误');
-                } else {
-                    echo 'ok';
-                    session(['user'=>$user]);
-                    dd(session('user'));
-                }
+//                dd($validator->errors()->all());
+                return redirect()->back()->withErrors($validator->errors());
             }
         }
+
+
     }
+
+
 
 }

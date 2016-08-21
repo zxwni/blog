@@ -1,31 +1,26 @@
 <?php namespace App\Http\Controllers\Admin;
 
-
-
-
-
-use App\Http\Model\Category;
-use App\Http\Model\Links;
+use App\Http\Model\Navs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class LinksController extends CommonController
+class NavsController extends CommonController
 {
     //展示列表
     public function index()
     {
-       $data=Links::orderBy('link_order','asc')->get();
-        return view('admin.links.index',compact('data'));
+        $data=Navs::orderBy('nav_order','asc')->get();
+        return view('admin.navs.index',compact('data'));
     }
 
     //排序
     public function changeorder(Request $request)
     {
         $res=$request->all();
-        $link_id=$res['link_id'];
-        $link_order=$res['link_order'];
-        $li=Links::find($link_id);
-        $li->link_order=$link_order;
+        $nav_id=$res['nav_id'];
+        $nav_order=$res['nav_order'];
+        $li=Navs::find($nav_id);
+        $li->nav_order=$nav_order;
         $re=$li->update();
         if($re){
             $data=[
@@ -41,31 +36,32 @@ class LinksController extends CommonController
         return $data;
     }
 
-    //添加链接页面
+    //添加导航页面
     public function create()
     {
-        return view('admin.links.add');
+        return view('admin.navs.add');
     }
-    //添加链接处理
+
+    //添加导航处理
     public function store(Request $request)
     {
         $input=$request->except('_token');
         if(!$input){
-            return view('admin.links.add');
+            return view('admin.navs.add');
         }else{
             $rules=[
-                'link_name'=>'required',
-                'link_url'=>'required',
+                'nav_name'=>'required',
+                'nav_url'=>'required',
             ];
             $message=[
-                'link_name.required'=>'链接名称不能为空',
-                'link_url.required'=>'链接地址不能为空',
+                'nav_name.required'=>'导航名称不能为空',
+                'nav_url.required'=>'导航链接地址不能为空',
             ];
             $validator=Validator::make($input,$rules,$message);
             if($validator->passes()){
-                $re= Links::create($input);
+                $re= Navs::create($input);
                 if($re){
-                    return redirect('admin/links');
+                    return redirect('admin/navs');
                 }else{
                     return redirect()->back()->with('msg','数据添加失败，请稍后重试');
                 }
@@ -75,32 +71,33 @@ class LinksController extends CommonController
         }
     }
 
-    //更新链接页面
-    public function edit($link_id)
+
+    //更新导航页面
+    public function edit($nav_id)
     {
-        $field=Links::find($link_id);
-        return view('admin.links.edit',compact('field'));
+        $field=Navs::find($nav_id);
+        return view('admin.navs.edit',compact('field'));
     }
-    //更新链接处理
-    public function update(Request $request,$link_id)
+    //更新导航处理
+    public function update(Request $request,$nav_id)
     {
         $input=$request->except('_token','_method');
         if(!$input){
-            return view('admin.links.edit');
+            return view('admin.navs.edit');
         }else{
             $rules=[
-                'link_name'=>'required',
-                'link_url'=>'required',
+                'nav_name'=>'required',
+                'nav_url'=>'required',
             ];
             $message=[
-                'link_name.required'=>'链接名称不能为空',
-                'link_url.required'=>'链接地址不能为空',
+                'nav_name.required'=>'链接名称不能为空',
+                'nav_url.required'=>'链接地址不能为空',
             ];
             $validator=Validator::make($input,$rules,$message);
             if($validator->passes()){
-                $re=Links::where('link_id',$link_id)->update($input);
+                $re=Navs::where('nav_id',$nav_id)->update($input);
                 if($re){
-                    return redirect('admin/links');
+                    return redirect('admin/navs');
                 }else{
                     return redirect()->back()->with('msg','数据添加失败，请稍后重试');
                 }
@@ -110,11 +107,10 @@ class LinksController extends CommonController
         }
     }
 
-
-    //删除链接
-    public function delete($link_id)
+    //删除导航
+    public function delete($nav_id)
     {
-        $re=Links::where('link_id',$link_id)->delete();
+        $re=Navs::where('nav_id',$nav_id)->delete();
         if($re){
             $data=[
                 'status'=>0,
@@ -129,6 +125,7 @@ class LinksController extends CommonController
         }
         return $data;
     }
+
 
 
 

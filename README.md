@@ -185,8 +185,17 @@ public function handle($request, Closure $next)
 (7).不解析
  {!! $field->_html !!}
 
+十一:更改时区sss
+编辑 .env 文件添加配置
+APP_TIMEZONE=PRC
+DB_TIMEZONE=+08:00
+若没启用 .env 配置文件, 编辑
+/vendor/laravel/lumen-framework/config/database.php
+/vendor/laravel/lumen-framework/src/Application.php
+分别修改 APP_TIMEZONE 和 DB_TIMEZONE 参数值。
 
-十一.数据库操作
+
+十二.数据库操作
 增：
  $re= Category::create($input); 插入表单传过来的数据
  Category::where('cate_id',$cate_id)->increment('cate_view'); //调用一次cate_view自增一

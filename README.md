@@ -231,6 +231,11 @@ $data=Category::find($cate_id); //根据主键获取数据对象
 $field=Article::Join('category','article.cate_id','=','category.cate_id')->where('art_id',$art_id)->first();
 //Article表 连接Category表 连接条件 article.cate_id==category.cate_id 取出指定art_id 的一条数据对象
 
+分页
+$page = max('1', intval($_GET[page]));
+$perpage = 10;
+$start = ($page - 1) * $perpage;
+$headline_list =Headline_post::where('tid',$tid)->skip($start)->take($perpage)->orderBy('dateline','desc')->get();
 
 
 
